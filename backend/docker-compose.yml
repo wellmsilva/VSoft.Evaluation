@@ -1,0 +1,70 @@
+services:
+  # vsoft.evaluation.frontend:
+  #   container_name: vsoft_evaluation_frontend
+  #   image: ${DOCKER_REGISTRY-}vsoftevaluationwebapi
+  #   build:
+  #     context: .
+  #     dockerfile: frontend/Dockerfile
+  #   environment:
+  #     - VITE_BASE_URL=vsoft.evaluation.webapi:8081
+
+  vsoft.evaluation.webapi:
+    container_name: vsoft_evaluation_webapi
+    image: ${DOCKER_REGISTRY-}vsoftdeveloperevaluationwebapi
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8080
+      - ASPNETCORE_HTTPS_PORTS=8081
+      - ConnectionStrings__DefaultConnection=Host=vsoft.evaluation.database;Port=5432;Database=developer_evaluation;Username=developer;Password=ev@luAt10n;Pooling=true;
+      - RabbitMQ__Username=developer
+      - RabbitMQ__Password=ev@luAt10n
+      - RabbitMQ__QueueName=evaluation 
+      - RabbitMQ__Host=vsoft_evaluation_rabbitmq 
+    ports:
+      - "8080:8080"
+      - "8081:8081"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
+    networks:
+      - vsoft_network
+
+  vsoft.evaluation.database:
+    container_name: vsoft_evaluation_database
+    image: postgres:13
+    environment:
+      POSTGRES_DB: evaluation
+      POSTGRES_USER: developer
+      POSTGRES_PASSWORD: ev@luAt10n
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+    networks:
+      - vsoft_network
+
+  vsoft.evaluation.rabbitmq:
+    container_name: vsoft_evaluation_rabbitmq
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: developer
+      RABBITMQ_DEFAULT_PASS: ev@luAt10n
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+      - ./certs:/etc/rabbitmq/certs
+    networks:
+      - vsoft_network
+
+volumes:
+  rabbitmq_data:
+    driver: local
+
+networks:
+  vsoft_network:
+    name: vsoft_network
+    driver: bridge
