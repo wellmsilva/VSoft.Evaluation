@@ -48,6 +48,11 @@ que permita a interação do usuário.
 ## Como executar a API
 
 ### 1. Executando com Docker Compose (Recomendado)
+Navegue até o diretório de backend:
+
+```sh
+cd backend
+```
 
 Execute o seguinte comando para iniciar os serviços:
 
