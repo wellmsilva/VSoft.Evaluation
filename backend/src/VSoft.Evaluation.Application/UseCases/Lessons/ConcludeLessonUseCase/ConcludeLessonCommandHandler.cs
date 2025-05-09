@@ -35,13 +35,7 @@ public sealed class ConcludeLessonCommandHandler : IConcludeLessonCommandHandler
 
 
         _logger.LogInformation("Aula ID {Id} concluída com sucesso", command.Id);
-        await _bus.Publish(new
-        {
-            NotificationDate = DateTime.UtcNow,
-            NotificationMessage = "Aula ID {Id} concluída com sucesso",
-            NotificationContent = command.Id,
-            NotificationType = NotificationType.Push
-        });
+        await _bus.Publish(command, cancellationToken);
               
         return new ConcludeLessonResponse(entity.Id, entity.StudentId, entity.Number, entity.Date, entity.Hour);
     }

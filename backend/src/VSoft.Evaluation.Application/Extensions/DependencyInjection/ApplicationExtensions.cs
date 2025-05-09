@@ -23,9 +23,9 @@ public static class ApplicationExtensions
         services.AddMassTransit(busConfigurator =>
         {
             var entryAssembly = Assembly.GetExecutingAssembly();
-            //busConfigurator.AddConsumers(entryAssembly);
-
+            busConfigurator.AddConsumers(entryAssembly);
             busConfigurator.AddConsumer<CreatedStudentConsumer>();
+            busConfigurator.AddConsumer<ConcludedLessonConsumer>();
 
 
             busConfigurator.UsingRabbitMq((context, busFactoryConfigurator) =>
@@ -43,21 +43,15 @@ public static class ApplicationExtensions
                 busFactoryConfigurator.AutoStart = true;
 
 
-                busFactoryConfigurator.ReceiveEndpoint("send-command", e =>
+                busFactoryConfigurator.ReceiveEndpoint("CreatedStudent", e =>
                 {
                     e.ConfigureConsumer<CreatedStudentConsumer>(context);
                 });
 
-                //busFactoryConfigurator.ReceiveEndpoint(configuration.GetValue("RabbitMQ:QueueName", string.Empty)!, ep =>
-                //{
-                //    ep.Durable = true;
-                //    ep.AutoDelete = false;
-                //    ep.Exclusive = false;
-                //    ep.PrefetchCount = 20;
-                //    ep.ConfigureConsumeTopology = false;
-
-                //});
-
+                busFactoryConfigurator.ReceiveEndpoint("ConcludedLesson", e =>
+                {
+                    e.ConfigureConsumer<ConcludedLessonConsumer>(context);
+                }); 
             });
         });
         

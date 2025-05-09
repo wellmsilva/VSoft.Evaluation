@@ -6,5 +6,7 @@ namespace VSoft.Evaluation.Domain.Repositories;
 
 public interface IUserRepository
 {
-    Task<User?> GetByUserName(string userName, CancellationToken cancellationToken);
+    Task<User> CreateAsync(User user);
+    Task<bool> Exists(string cpf, CancellationToken cancellationToken = default);
+    Task<User?> GetByUserName(string userName, CancellationToken cancellationToken = default);
 }

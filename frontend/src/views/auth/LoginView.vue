@@ -64,5 +64,8 @@ const onSubmit = handleSubmit(async values => {
     password: values.password
   } as LoginUserRequest
   const data = await authStore.dispatchLogin(userRequest);
+  if (data) {
+    router.push('/')
+  }
 })
 </script>
