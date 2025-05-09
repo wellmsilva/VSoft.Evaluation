@@ -1,6 +1,5 @@
 ﻿using MassTransit;
 using Microsoft.Extensions.Logging;
-using VSoft.Evaluation.Application.Common;
 using VSoft.Evaluation.Domain.Repositories;
 
 namespace VSoft.Evaluation.Application.UseCases.Students.CreateStudentUseCase;

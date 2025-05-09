@@ -19,7 +19,7 @@ internal class LessonRepository : RepositoryBase, ILessonRepository
 
     public Lesson? GetById(Guid id)
     {
-        return  _context.Lessons.FirstOrDefault(x => x.Id == id);
+        return  _context.Lessons.Include(x => x.Student).FirstOrDefault(x => x.Id == id);
     }
 
     public IEnumerable<Lesson> GetLessonByStudent(Guid studentId)

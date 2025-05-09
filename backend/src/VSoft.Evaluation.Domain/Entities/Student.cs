@@ -24,7 +24,6 @@ public class Student
     }
 
 
-
     public int Progress => Lessons.Count(x => x.Concluded);
     public bool CanSchedule => Lessons.Count() < Lesson.MaximumNumberLesson;
     public bool CanLessonsPractical => Lessons.Count(x => x.Concluded) >= Lesson.MinimumNumberLesson;
